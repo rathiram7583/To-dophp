@@ -24,7 +24,15 @@ form{
 }
 
 .add_task{
-    height: 40px;
+    height: 20px;
+    color: blue;
+    border: 2px solid black;
+    border-radius: 5px;
+    padding: 5px 20px;
+}
+
+.reset_task{
+    height: 20px;
     color: blue;
     border: 2px solid black;
     border-radius: 5px;
