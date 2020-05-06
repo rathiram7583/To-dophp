@@ -1,35 +1,33 @@
 <?php
-    session_start();
-
+     session_start();
     if (isset($_POST['reset'])) {
-        session_unset();
-        session_destroy();
-        session_start();
+        unset($_SESSION['task']);
+        unset($_SESSION['taskcompleted']);
     }
-    
-
+    else{
     if( !isset($_SESSION['task']))
     {
-
-         $_SESSION['task']=array();
-         $_SESSION['taskcompleted']=array();
-  }
+        $_SESSION['task']=array();
+     }
+     if(!isset($_SESSION['taskcompleted']))
+     {
+        $_SESSION['taskcompleted']=array();
+     }
 $_SESSION['task']=array_values($_SESSION['task']);
 $_SESSION['taskcompleted']=array_values($_SESSION['taskcompleted']);
 
 
-if ( isset( $_POST ) && !empty( $_POST ) )
+if ( isset( $_POST['submit']) && !empty( $_POST['task']) )
 {
 
     array_push( $_SESSION['task'], $_POST['task'] );
+    
+    
 }
-foreach ( $_SESSION['task'] as $completedTask ) {
-    if ( isset( $_POST[$completedTask] ) ) {
-      array_push($_SESSION['taskcompleted'], $completedTask);
-      
-    }
-  }
-   
+ 
+ 
+  
+}  
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -42,35 +40,34 @@ foreach ( $_SESSION['task'] as $completedTask ) {
     <div class="heading">
         <h1>TO-Do LIST</h1>
     </div>
-    <form action="index.php" method="POST" >
+    <form action="./index.php" method="POST" >
 
-    <input type="text" name="task" placeholder="Enter the Task" class="task_input"  id="task"/>
+    <input type="text" name="task" placeholder="Enter the Task" class="task_input"  />
     <button type="submit" name="submit" class="add_task"  >ADD TASK</button>
     <button type="submit" name="reset"  class="reset_task">RESET</button>
     </form>
     <?php if ( !empty( $_SESSION['task'] ) ) :?>
     <h2>My Task :</h2>
     <ul>
-    <?php foreach($_SESSION['task'] as $task) :?>
+    <?php foreach($_SESSION['task'] as $taskvalue) :?>
     <li>
-    <input type="checkbox"  name="taskcompleted" id="taskcompleted"/>
-    <?php echo $task?>
-    <button>Delete</button>
-    </li>
-    <?php endforeach;?>
+    <input type="checkbox"  name="taskcompleted[]" value=<?php $taskvalue?>  /> 
+    <?php echo $taskvalue?> 
+   </li>
+   <?php endforeach;?>
     </ul>
     <?php endif;?>
-    <?php if(isset($_POST['taskcompleted'])&& !empty($_SESSION['taskcompleted'])) :?>
-     <h2>Completed Task: </h2>
-     <ul>
-     <?php foreach($_SESSION['taskcompleted'] as $taskcompleted) :?>
-     <li>
-     <? php echo  $taskcompleted?>
-     </li>
-     <?php endforeach;?>
-     </ul>
-    <?php endif;?>
+    
+    
 
+    <pre>
+    <strong>$_POST contents:</strong>
+    <?php var_dump($_POST); ?>
+  </pre>
+  <pre>
+    <strong>$_SESSION contents:</strong>
+    <?php var_dump($_SESSION); ?>
+  </pre>
 
     
 
